@@ -1,389 +1,501 @@
-# Aprendizaje Automático Nivel 2 🚀
+# Classical Machine Learning 3 🚀
 
 ## Index
+1. Advanced Techniques on Data  
+    - Advanced Data Cleaning Techniques  
+        - Outlier Removal  
+        - Imputation of Missing Values  
+    - Dimensionality Reduction Techniques  
+        - Principal Component Analysis (PCA)  
+        - t-Distributed Stochastic Neighbor Embedding (t-SNE)  
 
-1. [Recap](#1-recap)
-2. [Learning Objectives](#2-learning-objectives)
-3. [Classical Machine Learning Overview](#3-classical-machine-learning-overview)
-    - [Supervised Learning](#supervised-learning)
-    - [Unsupervised Learning](#unsupervised-learning)
-4. [Training a Simple ML Model](#4-training-a-simple-ml-model)
-5. [Performance Metrics](#5-performance-metrics)
-6. [Cross-Validation](#6-cross-validation)
-7. [Model Evaluation & Hyperparameter Tuning](#7-model-evaluation--hyperparameter-tuning)
-    - [Model Evaluation](#model-evaluation)
-    - [Hyperparameter Tuning](#hyperparameter-tuning)
-8. [Conclusion & Next Steps](#8-conclusion--next-steps)
+2. Advanced Plotting Techniques  
+    - Advanced Visualization Techniques  
+        - Heatmaps, Pairplots  
+    - Time Series Analysis and Visualization  
+        - Plotly & Seaborn  
+    - Optimizing Visualization for Large Volumes of Data  
 
-## 1. Recap
+3. Pipelines  
+    - Automated Pipelines for Data Cleaning and Preprocessing  
+        - TensorFlow Data  
+    - Implementing Pipelines with scikit-learn and pandas  
+        - Steps for Effective Pipeline  
 
-In Level 1, we laid the foundation of machine learning by focusing on the early stages of any ML project—understanding what machine learning is and how to prepare data for modeling.
-
-Last week, we explored:
-
-  - ✅ What is Machine Learning  
-  - ✅ How to clean and transform raw data into usable form  
-    - Working with CSV files, handling missing values, removing outliers, and basic data visualization  
-    - Scaling numerical features and encoding categorical variables  
-  - ✅ The importance of ethics, fairness, and human values in building responsible AI systems
-
-This week, we’ll move beyond data preparation and talk about the rest of remaining stages of the machine learning pipeline.
-
-- How to choose and train a model  
-- How to evaluate model performance using the right metrics  
-- How to use cross-validation to ensure reliable results  
-- How to fine-tune your model using hyperparameter optimization  
-- And finally, how to prepare your model for presentation or deployment
-
-By the end, you’ll understand how to take a project from raw data all the way to a fully trained and tested machine learning model.
-
-## 2. Learning Objectives
-
-- Understand basic ML model categories  
-- Distinguish between regression and classification  
-- Recognize unsupervised learning problems  
-- Train and evaluate a simple model  
-- Know what cross-validation is and why it matters  
-
-
-## 3. Classical Machine Learning Overview
-
-Classical Machine Learning refers to a group of foundational algorithms and techniques that were developed before rapid growth of deep learning and neural networks. These methods are still widely used today because they are fast, interpretable, and effective for solving many real-world problems.
-
-<kbd><img src="images/SupervisedvsUnsupervised.webp" style="border:1px solid grey; border-radius:10px;"></kbd>
-
-**Types of Learning in Classical Machine Learning:**
-
-In Classical Machine Learning, there are a few types of learning methods. The two most common are **Supervised Learning** and **Unsupervised Learning**, but others like **Semi-Supervised** and **Reinforcement Learning** also exist and play their own important roles in specific scenarios.
+4. Neural Networks  
+    - Perceptrons  
+    - Neural Networks  
 
 ---
 
-### Supervised Learning 
+## 1. Advanced Techniques on Data
 
-Supervised learning uses **labeled data**, meaning each training example includes both input features and a correct output (label).
+### Advanced Data Cleaning Techniques
 
-📌 **Goal:** Learn a function that maps inputs to outputs  
-📌 **Example:** Predicting house prices based on features like size, location, and number of rooms
+Let’s revisit one of the first topics we covered: Data Cleaning.
 
-Supervised learning algorithms are divided into two categories based on the type of output:
+In the initial presentation, we cleaned the data using print statements and manual inspection. This approach worked because the dataset was small. However, with larger datasets, manually checking everything becomes impractical. Instead, we need faster and more automated methods to identify and fix issues like outliers and missing values.
 
-**1) Classification Algorithms (Predict discrete categories)**
-- Logistic Regression  
-- Support Vector Machines (SVM)  
-- k-Nearest Neighbors (k-NN)  
-- Decision Trees  
-- Random Forest  
-- Naive Bayes  
-- Gradient Boosting (e.g., XGBoost, AdaBoost)
+#### A) Outlier Removal
 
-**2) Regression Algorithms (Predict continuous values)**
-- Linear Regression  
-- Ridge/Lasso Regression  
-- Support Vector Regression (SVR)  
-- Decision Tree Regressor  
-- Random Forest Regressor  
-- k-Nearest Neighbors (k-NN) Regression
+There are two common and easy statistical methods to detect outliers: **Z-score** and **Interquartile Range (IQR)**.
 
-### Unsupervised Learning
+- Z-score Method  
+  Measures how far a data point is from the mean in terms of standard deviations.  
+  - If the Z-score is \|Z\| > 3 (greater than 3 or less than -3), the data point is typically considered an outlier.  
+  - This method assumes a normal distribution and works well when the data is symmetric.
 
-Unsupervised learning works with **unlabeled data**. The algorithm tries to find patterns, groupings, or structure in the data without knowing the correct output in advance.
+- IQR Method  
+  'The Interquartile Range' focuses on the middle 50% of the dataset.  
+  - It defines a "normal" range and treats anything significantly smaller or larger as a potential outlier.  
+  - The IQR is calculated as:  
+    - \[ Q1 - 1.5 * IQR, Q3 + 1.5 * IQR \]  
+    - Where **Q1** is the 25th percentile and **Q3** is the 75th percentile.
+  - Values outside this range are considered outliers.
 
-<kbd><img src="images/Supervised-and-unsupervised.png" style="border:1px solid grey; border-radius:10px;"></kbd>
+  #### When to Use Each Method  
+  - Use **Z-score** if your data is **normally distributed**, as it relies on the properties of the normal distribution.  
+  - Use **IQR** if your data is **skewed** or contains many **extreme values**, as it is more robust to non-normal distributions and outliers.
 
-📌 **Goal:** Discover hidden structures or relationships within the data  
-📌 **Example:** Segmenting customers into different groups based on their purchasing behavior  
-📌 **How to Recognize?:** No "target" column, or the goal is to group, compress, or summarize data
+#### B) Imputation of Missing Values
 
-Unsupervised learning includes the following categories:
+There are two commonly used statistical methods to fill in missing values: **Mean/Median/Mode Imputation** and **K-Nearest Neighbors (KNN) Imputation**.
 
-#### 1) Clustering Algorithms 
+- Mean / Median / Mode Imputation  
+  When a dataset contains missing values (NaNs), one of the simplest techniques is to replace them with a central tendency measure from the same column:  
+  - **Mean** – appropriate for normally distributed numerical data.  
+  - **Median** – more robust to outliers and skewed distributions.  
+  - **Mode** – used for categorical or discrete variables.
 
-Clustering algorithms are used to automatically group data points into clusters based on similarity, without needing labeled data.
+  This method is fast and easy to implement but doesn't account for relationships between features.
 
-- K-Means  
-- Hierarchical Clustering  
-- DBSCAN  
-- Mean Shift
+- K-Nearest Neighbors (KNN) Imputer  
+KNN imputation is a more advanced and data-aware approach.  
+Instead of using a single static value, KNN uses the values from the *K most similar rows* (neighbors) based on the other features.
 
-#### 2) Dimensionality Reduction Algorithms 
+  **How it works:**
 
-Dimensionality reduction techniques simplify datasets by reducing the number of input features while preserving important information and patterns.
+  1. **Find similar rows:**  
+    For the row with the missing value, KNN identifies other rows with similar values across the remaining columns.  
+      - Similarity is measured using a distance metric (e.g., Euclidean distance).
 
-- Principal Component Analysis (PCA)  
-- t-SNE  
-- Autoencoders *(transitions into deep learning)*  
-- Factor Analysis
+  2. **Pick K neighbors:**  
+      - Choose the *K* closest rows (neighbors).
 
-<kbd><img src="images/dimensionalityReduction.png" style="border:1px solid grey; border-radius:10px;"></kbd>
+  3. **Fill the missing value:**  
+      - If the missing value is **numerical**, take the **average** of the neighbors’ values.  
+      - If the missing value is **categorical**, take the **most frequent** category among the neighbors.
 
-#### 3) Association Rule Learning 
+    KNN imputation takes into account relationships between different features, making it more accurate but also more computationally expensive.
 
-Association rule learning finds relationships and patterns between variables in large datasets.
+--- 
 
-- Apriori  
-- Eclat
+### Dimensionality Reduction Techniques
+
+When working with datasets that have many features, it becomes more difficult to visualize, process, and model the data.  
+**Dimensionality reduction** helps by reducing the number of features while retaining as much important information as possible.
+
+There are two main types of techniques:  
+- **Linear:** PCA
+- **Non-linear:** t-SNE
+
+#### A) Principal Component Analysis (PCA)
+
+PCA is a **linear** dimensionality reduction method that transforms a dataset with many columns into a smaller set of new columns, called **principal components**. These components retain the most significant patterns or variance in the data.
+
+  - How PCA Works (Step-by-Step)
+    1. **Standardize the Data**  
+        - Each feature is scaled so they contribute equally to the analysis.
+
+    2. **Find Directions Where the Data Varies Most**  
+        - PCA identifies the directions (principal components) where the data is most spread out.  
+        - More spread (variance) = more "interesting" or informative.
+
+    3. **Create New Axes (Principal Components)**  
+        - These new axes are **linear combinations** of the original features.  
+        - The **first principal component** captures the most variance.  
+        - The **second principal component** captures the next most variance, and is orthogonal (independent) to the first.
+
+    4. **Drop Unimportant Information**  
+        - You can now choose to keep just the top few components (e.g., 1, 2, or 3) instead of all original features.  
+        - This makes your dataset smaller, faster to process, and easier to visualize—without losing much critical information.
+
+- Key Points to Remember
+  - **First principal component** = captures the most variance.  
+  - **Second principal component** = captures the next most variance and is **orthogonal** to the first.  
+  - PCA is a **linear method**, meaning it assumes relationships between features are straight-line (not curved).
+
+- Super Simple Example: 
+
+  Imagine you have students' scores in **Math** and **Science**, and those two scores are strongly related.
+
+    - PCA would find a new axis like **"Overall Academic Strength"**, which is a combination of Math and Science scores.  
+    - This makes it easier to understand overall performance without having to look at both subjects separately.
+
+#### B) t-Distributed Stochastic Neighbor Embedding (t-SNE)
+
+t-SNE is a **non-linear** dimensionality reduction technique designed to help visualize very complex, high-dimensional data in **2D or 3D**. Its primary goal is to preserve local structure: points that are close together in the high-dimensional space should remain close in the low-dimensional map.
+
+  - How t-SNE Works (Step-by-Step)
+    1. **Find Similar Points**  
+      - t-SNE analyzes the original high-dimensional dataset and determines which data points are similar.  
+      - "Similar" means that the points are close together based on feature values (using distance metrics like Euclidean distance).
+
+    2. **Create a New Map**  
+      - It then attempts to map those points into 2D or 3D space while preserving their relative similarities.  
+      - Points that were close in the original space will still be close in the reduced space, and distant points will remain distant.
+
+    3. **Spread Out the Points**  
+      - To prevent points from piling on top of each other, t-SNE uses a **t-distribution** rather than a Gaussian distribution.  
+      - This helps spread the points out more effectively and highlights the clustering structure.
+
+- Key Things to Know
+
+  - t-SNE is particularly effective at revealing groups (clusters) of similar data points.
+
+  - t-SNE assumes that relationships between features can be curved or complex—not just linear. It captures **non-linear structure** well.
+
+  - t-SNE is not typically used as a preprocessing step for model training. It is mainly used to **visualize** high-dimensional data.
+
+  - t-SNE can be **slow on large datasets** unless parameters are tuned for performance.
+
+- Super Simple Example
+
+  Imagine you have animal data with three features: **height**, **weight**, and **speed**.
+
+  - t-SNE reduces this 3D data into a 2D plot.  
+  - Similar animals (e.g., cheetahs and leopards) will appear **close together**.  
+  - Very different animals (e.g., whales and birds) will appear **far apart**.
+
+  This visualization helps you understand the structure of the data—even if it's originally in 100+ dimensions.
+
+## 2. Advanced Plotting Techniques
+
+When working with complex datasets, basic charts often aren’t enough. **Advanced visualizations** help you:
+
+- See relationships between multiple features at once  
+- Identify patterns, clusters, and outliers  
+- Better understand high-dimensional data  
+
+### A) Heatmaps
+
+A **heatmap** uses color to represent the strength of relationships between variables.  
+It’s commonly used to display **correlation matrices**, which show how strongly pairs of variables are related.
+
+**Why use it?**  
+- Quickly spot features that are strongly related  
+- Useful for **feature selection** and exploratory data analysis (EDA)
+
+**How to read it:**
+- **Darker or more intense colors** → Stronger relationships  
+- **Lighter colors (close to white)** → Weaker or no relationships  
+- **Positive correlation** → Both variables increase together  
+- **Negative correlation** → One variable increases while the other decreases  
+
+
+### B) Pairplots
+
+A **pairplot** displays scatter plots for every pair of features in a dataset.  
+It also shows **Kernel Density Estimation (KDE) plots** on the diagonals to represent individual feature distributions.
+
+**Why use it?**  
+- Visually compare every feature against every other feature  
+- Identify potential clusters, linear relationships, and outliers  
+- Very useful for **classification problems**
+
+**How to read it:**
+- Look at how the points are grouped  
+- A clear line or cluster → Strong relationship between the two features  
+- Clusters or separations in color → Good indicators of class separability
+
+
+### Quick Summary Table
+
+| Technique | Purpose                       | Best for...                      |
+|-----------|-------------------------------|----------------------------------|
+| **Heatmap** | Show feature relationships     | Correlation analysis              |
+| **Pairplot** | Compare all feature pairs     | Finding patterns and clusters     |
+| **3D Plot (t-SNE or PCA)** | Plot high-dimensional data in 2D/3D | Detecting hidden structure        |
+
+---
+### Time Series Analysis and Visualization
+
+#### A) Time Series Analysis
+
+A **time series** is data collected over time—typically at regular intervals such as daily, monthly, or yearly.  
+**Time Series Analysis** focuses on identifying trends, recurring patterns, and irregularities in data over time.
+
+**Examples of time series data:**
+- Daily stock prices  
+- Hourly temperature readings  
+- Monthly website traffic
+
+**Key components to look for:**
+- **Trend**: Long-term upward or downward movement in the data  
+- **Seasonality**: Repeating patterns at regular intervals (e.g., holiday sales spikes in December)  
+- **Noise**: Random variation that does not follow a pattern
+
+**Why it's useful:**
+- Forecast future values  
+- Detect anomalies or unusual events  
+- Understand underlying behavior or change over time
+
+#### B) Visualization Tools: Plotly & Seaborn
+
+Both Plotly and Seaborn can help visualize time series data, but they serve different needs.
+
+- Plotly for Time Series
+    **Plotly** is a powerful library for creating **interactive visualizations**.
+
+    **Why use Plotly?**
+    - Zoom, pan, and hover to explore data  
+    - Handles large datasets smoothly  
+    - Great for dashboards, web apps, and reports  
+    - Supports advanced features like sliders, animation frames, and range selectors
+
+    **Best for:**
+    - Interactive dashboards  
+    - Presentations where viewers need to explore the data  
+    - Large-scale, dynamic datasets
+
+- Seaborn for Time Series
+
+    **Seaborn** is a high-level wrapper over Matplotlib, ideal for **static visualizations**.
+
+    **Why use Seaborn?**
+    - Quick and easy for making clean, professional-looking plots  
+    - Works well for academic reports and scientific papers  
+    - Ideal when you don’t need interactivity
+
+    **Best for:**
+    - Fast static charts  
+    - Clean visuals for written reports or publications  
+    - Simpler, small-to-medium datasets
+
+#### When to Use What
+
+| Tool     | Best For                                         |
+|----------|--------------------------------------------------|
+| **Plotly** | Interactive time series plots for large datasets |
+| **Seaborn** | Fast, clean static charts for reports or papers |
+
+### C) Optimizing Visualization for Large Volumes of Data
+
+When working with massive datasets (millions of rows or many features), visualizations can become:
+
+- **Slow** to render  
+- **Messy** and hard to interpret  
+- Or even cause your computer to **crash**
+
+To avoid these issues, we use special techniques to make charts **faster**, **cleaner**, and more **informative**—without losing key insights.
+
+#### Solutions for Optimizing Big Data Visualizations
+
+1. **Sampling the Data**  
+   Instead of plotting every single data point, you can work with a smaller, representative subset.  
+   - **Random Sampling**: Select a random group of points.  
+   - **Stratified Sampling**: Ensure the sample maintains the same proportions of different classes (useful for classification tasks).
+
+2. **Dimensionality Reduction**  
+   If your dataset has too many features (columns), use reduction techniques to simplify it:  
+   - **PCA (Principal Component Analysis)** – for linear feature reduction  
+   - **t-SNE (t-distributed Stochastic Neighbor Embedding)** – for uncovering non-linear patterns
+
+3. **Aggregating the Data**  
+   Instead of plotting raw data points, summarize the information into meaningful groups:  
+   - **Averages**  
+   - **Totals**  
+   - **Counts**  
+   - **Binned groups** (e.g., by day, week, or category)
+
+   **Example:**  
+   Instead of plotting 1 million raw sales transactions, show the **average sales per day**.  
+   This reduces clutter but keeps key trends.
+
+#### Why These Techniques Help
+
+- Reduce load time and memory usage  
+- Improve readability  
+- Preserve important patterns and trends  
+- Allow exploration of big data even with limited computing resources
+
+#### Quick Reference Table: Big Data Visualization Tips
+
+| Problem            | Solution                              |
+|--------------------|---------------------------------------|
+| Too many points    | Random or stratified sampling         |
+| Too many features  | Dimensionality reduction (e.g., PCA)  |
+| Messy charts       | Aggregate data (group and average)    |
 
 ---
 
-All of these algorithms involve a lot of math and reasoning behind each one. This is one of the easiest parts to **implement**, but one of the hardest to **understand deeply**. To learn more, you can explore visual explanations, online tutorials, or dive into the theory to understand how and why they work under the hood.
+## 3. Pipelines
 
-[Mathematical and Visual explanation of some algorithms](https://mlu-explain.github.io/)
+### Implementation of Automated Pipelines for Data Cleaning and Preprocessing
 
+In real-world machine learning projects, data cleaning and preprocessing are often the most **time-consuming and repetitive** tasks.
 
-### Other Types of Learning
+Manually performing these steps every time is:
+- **Slow**
+- **Inconsistent**
+- **Hard to reuse** across different projects
 
-**Semi-Supervised Learning:** combines a small amount of labeled data with a large amount of unlabeled data. This is useful when labeling is expensive or time-consuming, and we still want to benefit from supervised learning.
-
-**Reinforcement Learning:** involves a model learning by interacting with an environment and receiving rewards or penalties. While it's less common in classical ML, it's widely used in areas like robotics, game-playing agents, and recommendation systems.
-
-## 4. Training a Simple ML Model
-
-Now comes the fun part—actually training a machine learning model!
-
-Once your data is cleaned, transformed, and ready, the coding process is surprisingly simple. In many cases, it only takes a single import and few lines of code to get started.
-
-### Typical Steps in Training a Model:
-
-1. **Split the Data** – Divide your dataset into training and testing sets  
-2. **Define the Goal** – Determine whether your problem is *supervised* or *unsupervised*
-3. **Choose an Algorithm** – Based on your goal, select a few applicable models to try  
-4. **Train & Test** – Train the model on your training data, then test it on your unseen test data  
-5. **Evaluate Performance** – Use metrics like **accuracy**, **precision**, or **mean squared error** to decide which model performs best
-
-It’s common to try multiple models and compare their performance before choosing the best one.
+To solve this, we use **automated pipelines** — organized sequences of steps that clean, preprocess, and transform data in a consistent and automated way.
 
 ---
 
-### Example: K-Nearest Neighbors Classifier
+### What Is a Pipeline?
+
+A **pipeline** is a structured workflow that automates each step in the data preparation process.  
+Instead of writing code for each transformation manually, pipelines let you **link** all your preprocessing tasks into one clean and repeatable process.
+
+**Typical pipeline steps include:**
+- Imputing missing values  
+- Scaling numerical features  
+- Encoding categorical variables  
+- Feature selection  
+- Any other transformation before modeling
+
+---
+
+### Benefits of Pipelines
+
+- **Save Time**: Reusable pipelines dramatically reduce data prep time.  
+- **Consistency**: Ensures the same transformations are applied every time, reducing the risk of mistakes.  
+- **Shareability**: Pipelines can be shared across teams (especially in scikit-learn).  
+- **Extendability**: You can easily add or remove steps as needed.
+
+---
+
+### How Pipelines Work in Practice
+
+#### cikit-learn Pipeline (for Classical Machine Learning)
 
 ```python
-from sklearn.model_selection import train_test_split
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import accuracy_score
+from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.compose import ColumnTransformer
+from sklearn.ensemble import RandomForestClassifier
 
-# Split data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=5)
+# Define preprocessing for numerical and categorical features
+numeric_features = ['age', 'income']
+numeric_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='mean')),
+    ('scaler', StandardScaler())
+])
 
-# Create and train the model
-model = KNeighborsClassifier(n_neighbors=3)
-model.fit(X_train, y_train)
+categorical_features = ['gender', 'education']
+categorical_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='most_frequent')),
+    ('encoder', OneHotEncoder(handle_unknown='ignore'))
+])
 
-# Make predictions and evaluate
-y_pred = model.predict(X_test)
-print("Accuracy:", accuracy_score(y_test, y_pred))
+# Combine into a full preprocessor
+preprocessor = ColumnTransformer(transformers=[
+    ('num', numeric_transformer, numeric_features),
+    ('cat', categorical_transformer, categorical_features)
+])
+
+# Add model to pipeline
+clf_pipeline = Pipeline(steps=[
+    ('preprocessor', preprocessor),
+    ('classifier', RandomForestClassifier())
+])
+
+# Fit the pipeline
+clf_pipeline.fit(X_train, y_train)
 ```
-## 5. Performance Metrics
-
-After training a model, we need a way to measure how well it performs. This is where **performance metrics** come in. The right metric depends on your problem type and what matters most in your specific use case.
-
-Not all “good” results mean the same thing. A model might look great on the surface but fail in areas that matter most for your goal.
-
-
-**Example 1: Email Spam Filter (Classification):**
-
-  Let’s say you're building a model to detect spam emails.
-
-  - **Accuracy** = How many emails the model got right overall  
-    If your model is 95% accurate, that sounds great… right?
-
-  But what if the model misses a lot of spam or, worse, marks real emails as spam?
-
-  That’s where two other metrics come in:
-
-  - **Precision** = Of the emails marked as spam, how many were actually spam?  
-    High precision means fewer **false alarms**.
-
-  - **Recall** = Of all the actual spam emails, how many did the model catch?  
-    High recall means fewer **missed spam**.
-
-  📌 **If missing spam is okay but marking real emails as spam is bad, go for high precision.**  
-  📌 **If catching all spam is critical (even if some real emails are marked incorrectly), go for high recall.**
-
-
-
-**Example 2: Predicting House Prices (Regression):**
-
-  Now imagine you’re predicting house prices. The model says a house is worth **$300,000**, but the real value is **$310,000**. That’s a **$10,000 error**.
-
-  We use these metrics to measure how far off the predictions are:
-
-  - **MAE (Mean Absolute Error)** = On average, how many dollars off are we?  
-  - **MSE (Mean Squared Error)** = Same idea, but **larger mistakes are punished more** because the errors are squared  
-  - **RMSE (Root Mean Squared Error)** = Like MSE, but puts the result back in the original units (like dollars)  
-  - **R² Score** = Quantifies how well a regression model's predictions align with the actual data points (closer to 1 is better)
-
-  📌 **If small errors are okay**, use MAE.  
-  📌 **If big mistakes are really bad**, use MSE or RMSE to penalize them more.  
-  📌 **If you want to know how much variance your model explains**, use R².
-
-The goal is to always pick the metric that matches the **real-world impact** of your predictions. A good model in one case might be a poor fit for another, depending on what errors matter most.
-
-## 6. Cross-Validation
-
-In our earlier example, we used a common approach: splitting the dataset into two parts—one for training and one for testing. While this is simple and widely used, there's a problem. A single train-test split can be **unreliable**, especially with smaller datasets. The model’s performance might vary significantly depending on how the data is divided.
-
-That’s where **Cross-Validation** comes in.
-
-<kbd><img src="images/cross_validation.png" style="border:1px solid grey; border-radius:10px;"></kbd>
-
-Cross-validation is a more **robust and reliable** method for evaluating a machine learning model. Instead of training and testing the model just once, cross-validation splits the data into multiple parts (called **folds**). The model is trained and tested multiple times—each time using a different fold for testing and the remaining folds for training.
-
-In the end, you average the results from each run to get a more stable and accurate estimate of your model’s performance.
-
-- Provides a **better estimate** of model performance  
-- Helps **prevent overfitting**  
-- **Reduces variance** caused by random train/test splits  
-
-Cross-validation is especially important when you’re tuning hyperparameters or comparing different models. It ensures that the performance you're seeing isn't just a result of a "lucky" data split.
-
-## 7. Model Evaluation & Hyperparameter Tuning
-
-Training a model is just the beginning. After that, the next steps are:
-
-- **Evaluate how well it performs**  
-- **Improve it through tuning**
 
 ---
+## 4. Perceptrons and Neural Networks
 
-### Model Evaluation
+**Perceptrons** are the building blocks of neural networks.  
+- A **single-layer perceptron** is often simply called a *neural network*.  
+- A **multi-layer perceptron** is typically referred to as a *neural network* (plural).  
 
-Once you've chosen a model and trained it, you need to evaluate how well it's performing. This means looking at the **performance metrics** (like accuracy, precision, or MAE) and checking for issues such as:
+The perceptron is a **linear binary classifier** used in supervised learning.  
+Neural networks, which are a subset of machine learning, provide the foundation for **deep learning**.  
+They are inspired by the structure and functioning of the human brain, mimicking how biological neurons transmit signals.
 
-- **Overfitting** – The model performs very well on training data but poorly on unseen data  
-- **Underfitting** – The model performs poorly on both training and testing data because it hasn’t learned enough  
+### What is a Perceptron?
 
-<kbd><img src="images/OverfitingvsUnderfitting.svg" style="border:1px solid grey; border-radius:10px;"></kbd>
+A **Perceptron** is the most basic form of a neural network.  
+It is a **binary classifier** that outputs either 0 or 1.  
+It can only solve problems where data is **linearly separable** (i.e., it can be separated by a straight line).
 
-In this figure, the lines represent our model (or function), and the dots are our data points. Each scenario shows how well the model is able to generalize (how well it can make accurate predictions on new, unseen data.)
+Perceptrons are supervised learning algorithms — they learn from labeled data.
 
-This means that when we introduce a new data point that the model hasn't seen before, we want the model to make a prediction that is as close as possible to the true value.
+### Components of a Perceptron
 
-- In the overfitting case, the model is too complex and tries to fit every single point in the training data, even the noise. While it may perform very well on the training set, it fails to generalize and performs poorly on new data.
+- **Input Values (Features)**: Data fed into the model (e.g., height, weight, pixel values).  
+- **Weights**: Determine the importance of each input feature.  
+- **Bias**: A constant added to shift the output left or right.  
+- **Net Sum**: Weighted sum of inputs plus the bias.  
+- **Activation Function**: Determines if the neuron "fires" — adds non-linearity.
 
-- In the underfitting case, the model is too simple and doesn't capture the underlying pattern in the data. It performs poorly on both the training data and new data because it hasn’t learned enough.
+### Why Are Weights and Bias Important?
 
-- In the ideal fit, the model captures the true underlying pattern without overcomplicating things. It performs well on both the training data and new data, showing good generalization.
+- **Weights** indicate the strength of influence each input has.  
+  - Large weights = more influence  
+  - Positive weight = direct relationship  
+  - Negative weight = inverse relationship  
+- **Bias** shifts the decision boundary and helps the model fit the data better.
 
-The goal is to find the right balance, where the model is just complex enough to learn the important patterns but not so complex that it memorizes the data.
+### Why Do We Need Activation Functions?
 
-**How to implement:**
-To spot these issues, use graphs like Accuracy or Error curves during training.
+Activation functions determine whether the output is activated.  
+They allow neural networks to model complex, non-linear relationships.  
+Without them, the perceptron would behave like a simple linear model.
 
-<kbd><img src="images/OvsUGraph.jpeg" style="border:1px solid grey; border-radius:10px;"></kbd>
+**Common Activation Functions:**
+- **Sigmoid** – Used for binary classification (output between 0 and 1)  
+- **ReLU** (Rectified Linear Unit) – Used in hidden layers for deep learning  
+- **Softmax** – Used for multiclass classification problems
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.model_selection import learning_curve
-from sklearn.datasets import load_iris
-from sklearn.linear_model import LogisticRegression
+### How Does a Perceptron Work?
 
-# Load data
-X, y = load_iris(return_X_y=True)
+1. Multiply each input by its corresponding weight  
+2. Add the bias  
+3. Pass the result through an activation function  
+4. Compare the predicted output with the true label using a **cost function**  
+5. If the prediction is wrong, adjust weights and bias — this is called **training**
 
-# Choose a simple model
-model = LogisticRegression(max_iter=200)
+### Perceptron Models Explained
 
-# Get learning curve data
-train_sizes, train_scores, val_scores = learning_curve(
-    model, X, y, cv=5, scoring='accuracy'
-)
+#### Single-Layer Perceptron (SLP)
 
-# Compute average scores across folds
-train_scores_mean = np.mean(train_scores, axis=1)
-val_scores_mean = np.mean(val_scores, axis=1)
+- Simplest form of a neural network  
+- Solves only **linearly separable** problems  
+  - ✅ Works for: AND gate  
+  - ❌ Fails for: XOR gate  
+- **Feed-forward network**: Data flows only forward, no loops  
+- **Limitation**: Cannot model non-linear relationships
 
-# Plot
-plt.plot(train_sizes, train_scores_mean, label='Training Score')
-plt.plot(train_sizes, val_scores_mean, label='Validation Score')
-plt.xlabel('Training Set Size')
-plt.ylabel('Accuracy')
-plt.title('Learning Curve')
-plt.legend()
-plt.grid(True)
-plt.show()
-```
----
+#### Multilayer Perceptron (MLP)
 
-### Hyperparameter Tuning
+- More powerful; built by stacking multiple layers of perceptrons  
+- Can model **non-linear** and **complex** problems (e.g., XOR)  
 
-Every model has settings you can adjust, called *hyperparameters*. These are not learned from the data but are defined before training begins.
+**Two Key Phases:**
 
-#### Example:  
-For *K-Nearest Neighbors (KNN)*, a key hyperparameter is:
+1. **Forward Propagation**  
+   - Inputs move forward through each layer  
+   - Each layer processes and passes the result to the next  
+   - Final prediction is made  
 
-- `n_neighbors`: How many nearby points should the model consider?
+2. **Backward Propagation (Backpropagation)**  
+   - The network calculates the error (difference between predicted and actual values)  
+   - It updates weights and biases from **output back to input**  
+   - This is how the model learns and improves
 
-You can try different values like 3, 5, or 7 and compare their accuracy.
+ 🧠 **Backpropagation** is the core technique enabling learning in modern neural networks.
 
-### Common Hyperparameters by Model
+### Neural Networks: Foundation of Deep Learning
 
-| Model              | Common Hyperparameters                    |
-|-------------------|--------------------------------------------|
-| KNN                | `n_neighbors`                              |
-| Decision Tree      | `max_depth`, `min_samples_split`           |
-| Random Forest      | `n_estimators`, `max_depth`                |
-| SVM                | `C`, `kernel`, `gamma`                     |
-| Gradient Boosting  | `learning_rate`, `n_estimators`, `max_depth` |
+Neural networks are the basis for more advanced deep learning architectures:
 
-The hardest part about hyperparameter tuning is understanding **which hyperparameters to tune and why**. This requires a deeper understanding of how each machine learning algorithm works internally and going into that would take too long for this presentation.
-
-Instead, I recommend starting simple:  
-Pick **one algorithm** you're using, and look it up online to see what it is and how it works, then search **Scikit-learn's documentation** to see what hyperparameters are available and what they control.
-
-Focus on understanding a **few key hyperparameters** that commonly affect the model’s behavior, and experiment by changing their values slightly. This helps you see how small adjustments can impact the model’s accuracy, overfitting, or underfitting.
-
-As you grow more comfortable, you'll begin to recognize which hyperparameters matter most for different types of problems.
-
-For now, just remember:
-- **Hyperparameters** are settings you define before training your model (like`n_neighbors` in KNN).
-- They are different from **parameters**, which are learned by the model during training.
-
-### How to Tune?
-
-We usually combine hyperparameter tuning with **Cross-Validation**, using tools like **Grid Search**.
-
-Grid Search is a method that automatically tests all possible combinations of hyperparameter values to find the best-performing model configuration.
-
-#### Grid Search Example:
-
-```python
-from sklearn.model_selection import GridSearchCV
-from sklearn.neighbors import KNeighborsClassifier
-
-params = {'n_neighbors': [3, 5, 7, 9]}
-grid = GridSearchCV(KNeighborsClassifier(), params, cv=5)
-grid.fit(X_train, y_train)
-
-print("Best Parameters:", grid.best_params_)
-print("Best Score:", grid.best_score_)
-```
-
-## 8. Conclusion & Next Steps
-
-At this point, you've gone through the **entire machine learning process** from start to finish:
-
-- You explored and cleaned your data  
-- You transformed it to make it model-ready  
-- You chose the right algorithms  
-- You trained and evaluated multiple models  
-- You tuned them to improve performance  
-
-Now all that’s left is to **communicate your results** in a way that’s clear and impactful. Whether it's through a dashboard, a report, or a  slideshow. Presenting your findings effectively is the final step that shows the value of everything you've done.
-
-
-#### What's Next:
-
-Now that you've completed the full modeling cycle, from preparing data to training, evaluating, and tuning models. You’ve built a solid foundation in classical machine learning.
-
-In the next presentation, we’ll take things further by diving deeper into several key topics we’ve touched on and explore new concepts.
-
-We’ll look at **advanced data cleaning techniques** for handling messy, real-world datasets, including smarter methods for dealing with outliers, missing values, and noisy data.
-
-You’ll also be introduced to **dimensionality reduction techniques**, such as **Principal Component Analysis (PCA)**, which help simplify complex datasets while preserving the most important information.
-
-We’ll also introduce **neural networks**, explaining how they mimic the brain to solve more complex problems and why they’ve become the foundation of modern artificial intelligence.
-
-Finally, we’ll cover **pipelines**, which help automate and organize the entire machine learning workflow.
-
+- **Convolutional Neural Networks (CNNs)** – Used in image recognition and computer vision  
+- **Recurrent Neural Networks (RNNs)** – Ideal for time series, sequences, and text  
+- **Transformers** – Power modern language models like **ChatGPT**, **BERT**, and **T5**
 
