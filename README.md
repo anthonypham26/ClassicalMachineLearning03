@@ -26,7 +26,6 @@
     - Perceptrons  
     - Neural Networks  
 
----
 
 ## 1. Advanced Techniques on Data
 
@@ -41,9 +40,10 @@ In the initial presentation, we cleaned the data using print statements and manu
 There are two common and easy statistical methods to detect outliers: **Z-score** and **Interquartile Range (IQR)**.
 
 - Z-score Method  
-  Measures how far a data point is from the mean in terms of standard deviations.  
+  Measures how far a data point is from the mean in terms of standard deviations.
   - If the Z-score is \|Z\| > 3 (greater than 3 or less than -3), the data point is typically considered an outlier.  
   - This method assumes a normal distribution and works well when the data is symmetric.
+<kbd><img src="images/zScore.png" style="border:1px solid grey; border-radius:10px;"></kbd>
 
 - IQR Method  
   'The Interquartile Range' focuses on the middle 50% of the dataset.  
@@ -52,6 +52,7 @@ There are two common and easy statistical methods to detect outliers: **Z-score*
     - \[ Q1 - 1.5 * IQR, Q3 + 1.5 * IQR \]  
     - Where **Q1** is the 25th percentile and **Q3** is the 75th percentile.
   - Values outside this range are considered outliers.
+  <kbd><img src="images/IQR.png" style="border:1px solid grey; border-radius:10px;"></kbd>
 
   #### When to Use Each Method  
   - Use **Z-score** if your data is **normally distributed**, as it relies on the properties of the normal distribution.  
@@ -85,6 +86,8 @@ Instead of using a single static value, KNN uses the values from the *K most sim
   3. **Fill the missing value:**  
       - If the missing value is **numerical**, take the **average** of the neighbors’ values.  
       - If the missing value is **categorical**, take the **most frequent** category among the neighbors.
+
+  <kbd><img src="images/knn.gif" style="border:1px solid grey; border-radius:10px;"></kbd>
 
     KNN imputation takes into account relationships between different features, making it more accurate but also more computationally expensive.
 
@@ -120,12 +123,15 @@ PCA is a **linear** dimensionality reduction method that transforms a dataset wi
         - You can now choose to keep just the top few components (e.g., 1, 2, or 3) instead of all original features.  
         - This makes your dataset smaller, faster to process, and easier to visualize—without losing much critical information.
 
+  <kbd><img src="images/pca.png" style="border:1px solid grey; border-radius:10px;"></kbd>
+
+
 - Key Points to Remember
   - **First principal component** = captures the most variance.  
   - **Second principal component** = captures the next most variance and is **orthogonal** to the first.  
   - PCA is a **linear method**, meaning it assumes relationships between features are straight-line (not curved).
 
-- Super Simple Example: 
+- Simple Example: 
 
   Imagine you have students' scores in **Math** and **Science**, and those two scores are strongly related.
 
@@ -149,17 +155,16 @@ t-SNE is a **non-linear** dimensionality reduction technique designed to help vi
       - To prevent points from piling on top of each other, t-SNE uses a **t-distribution** rather than a Gaussian distribution.  
       - This helps spread the points out more effectively and highlights the clustering structure.
 
+<kbd><img src="images/t-sne.png" style="border:1px solid grey; border-radius:10px;"></kbd>
+
 - Key Things to Know
 
   - t-SNE is particularly effective at revealing groups (clusters) of similar data points.
-
   - t-SNE assumes that relationships between features can be curved or complex—not just linear. It captures **non-linear structure** well.
-
   - t-SNE is not typically used as a preprocessing step for model training. It is mainly used to **visualize** high-dimensional data.
-
   - t-SNE can be **slow on large datasets** unless parameters are tuned for performance.
 
-- Super Simple Example
+- Simple Example
 
   Imagine you have animal data with three features: **height**, **weight**, and **speed**.
 
@@ -186,6 +191,8 @@ It’s commonly used to display **correlation matrices**, which show how strongl
 - Quickly spot features that are strongly related  
 - Useful for **feature selection** and exploratory data analysis (EDA)
 
+<kbd><img src="images/heatmap.png" style="border:1px solid grey; border-radius:10px;"></kbd>
+
 **How to read it:**
 - **Darker or more intense colors** → Stronger relationships  
 - **Lighter colors (close to white)** → Weaker or no relationships  
@@ -203,13 +210,12 @@ It also shows **Kernel Density Estimation (KDE) plots** on the diagonals to repr
 - Identify potential clusters, linear relationships, and outliers  
 - Very useful for **classification problems**
 
+<kbd><img src="images/pairplot.png" style="border:1px solid grey; border-radius:10px;"></kbd>
+
 **How to read it:**
 - Look at how the points are grouped  
 - A clear line or cluster → Strong relationship between the two features  
 - Clusters or separations in color → Good indicators of class separability
-
-
-### Quick Summary Table
 
 | Technique | Purpose                       | Best for...                      |
 |-----------|-------------------------------|----------------------------------|
@@ -272,8 +278,6 @@ Both Plotly and Seaborn can help visualize time series data, but they serve diff
     - Clean visuals for written reports or publications  
     - Simpler, small-to-medium datasets
 
-#### When to Use What
-
 | Tool     | Best For                                         |
 |----------|--------------------------------------------------|
 | **Plotly** | Interactive time series plots for large datasets |
@@ -318,8 +322,6 @@ To avoid these issues, we use special techniques to make charts **faster**, **cl
 - Improve readability  
 - Preserve important patterns and trends  
 - Allow exploration of big data even with limited computing resources
-
-#### Quick Reference Table: Big Data Visualization Tips
 
 | Problem            | Solution                              |
 |--------------------|---------------------------------------|
