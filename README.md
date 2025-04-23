@@ -289,6 +289,8 @@ To avoid these issues, we use techniques to make charts *faster*, *cleaner*, and
    - **Random Sampling**: Select a random group of points.  
    - **Stratified Sampling**: Ensure the sample maintains the same proportions of different classes (useful for classification).
 
+<kbd><img src="images/stratifiedSampling.webp" style="border:1px solid grey; border-radius:10px;"></kbd>
+
 2. **Dimensionality Reduction**  
    If your dataset has too many features use reduction techniques to simplify it:  
    - **PCA (Principal Component Analysis)** – for linear feature reduction  
@@ -401,6 +403,8 @@ A *Perceptron* is the most basic form of a neural network.
 It is a *binary classifier* that outputs either 0 or 1.  
 It can only solve problems where data is *linearly separable* (it can be separated by a straight line).
 
+<kbd><img src="images/perceptron.png" style="border:1px solid grey; border-radius:10px;"></kbd>
+
 ### Components of a Perceptron
 
 - **Input Features**: Data fed into the model.  
@@ -442,6 +446,8 @@ Without them, the perceptron would behave like a simple linear model.
 - More powerful; built by stacking multiple layers of perceptrons  
 - Can model *non-linear* and *complex* problems
 
+<kbd><img src="images/mlp.jpeg" style="border:1px solid grey; border-radius:10px;"></kbd>
+
 **Two Key Phases:**
 
 1. **Forward Propagation**  
@@ -453,6 +459,9 @@ Without them, the perceptron would behave like a simple linear model.
    - The network calculates the error (difference between predicted and actual values)  
    - It updates weights and biases from *output back to input*  
    - This is how the model learns and improves
+
+<kbd><img src="images/backProp.gif" style="border:1px solid grey; border-radius:10px;"></kbd>
+
 
 *Backpropagation* is the core technique enabling learning in modern neural networks.
 
